@@ -43,7 +43,7 @@ class Plg_Table_Controller_Data
 	
 //    public function action1()
 //    {
-//        switch(filter_input(INPUT_GET, 'action'))
+//        switch(filter_input(INPUT_GET, 'action1'))
 //        {
 //            case 'add':
 //                $this -> actionAdd();

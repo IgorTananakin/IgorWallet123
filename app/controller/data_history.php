@@ -98,6 +98,7 @@ class Plg_Table_Controller_Data1
 					'id_user'   => $data_ar['id_user'],
 //                    'balance'   => $data_ar['balance'],
 					'total_spent'   => $data_ar['total_spent'],
+					
 					'date_create' => time(),
 				),
 				array('%s', '%s', '%d')

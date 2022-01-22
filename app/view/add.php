@@ -22,7 +22,7 @@
 						
 						foreach ( $users as $key ) {
 							foreach ($key as $data) {
-								if($data->user_login !== NULL){
+								if($data->user_login !== NULL) {
 									
 						?>
 									<option value="<?php echo strval($data->ID); ?>">

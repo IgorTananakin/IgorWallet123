@@ -1,7 +1,5 @@
 <?php
-//include_once(__DIR__ . '/js/functions.php');
-////подключение для подтверждения отправки формы
-////подключил с расчётом чтоб не прописывать путь от корня
+
 
 //страница блок списания
 function debit() {
@@ -44,18 +42,26 @@ function debit() {
 	}
 	
 ?>
-
+<link rel="stylesheet" href="/wp-content/plugins/wordpress-plugin-demo-table-master/js/functions.js">
 <form action="" method="post" id="my_form" onsubmit="pullOff(this);">
 		<label for="user">Выберите матч</label>
-		<select name="price_match" id="">
+		<select class="price_match" name="price_match" id="">
 			<option value="20">Матч лиги A 20 руб</option>
 			<option value="10">Матч лиги B 10 руб</option>
 		</select>
-		<button name="submit" >Списать средства</button>
+	
+		<input name="user_id" type="text" class="user_id" value="<?php echo get_current_user_id(); ?>">
+		<button name="submit" style="background-color: transparent; color:blue; border:0;">Списать средства</button>
+	<a class="submit_link" href="#">Счёт матча 0-0</a>
+	
+	
 <!--		<input type="submit" name="submit"/>-->
 </form>
-<?php
 
+<?php
+//подключение js для того чтобы отправить форму по ссылке, а не по кнопке как было рание
+//html->js(отправка формы)->php(обработка и вставка в базу)->mysql(transaction)
+include_once(__DIR__ . '/js/link.php');//в дальнейшем переделать подключение средства wp
 }
 
 debit();

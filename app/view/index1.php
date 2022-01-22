@@ -60,7 +60,8 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 			//'balance'	 => __('Текущий баланс', 'lance'),
 			'total_spent'	 => __('Сумма списания', 'lance'),
 			
-            'date_create'=> __('Время операции', 'lance'),
+//            'date_create'=> __('Время операции', 'lance'),
+			'date_transaction'=> __('Время транзакция', 'lance'),
         );
     }
  
@@ -98,8 +99,8 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 		
 		$get_orderby = filter_input(INPUT_GET, 'orderby');
 		$order = filter_input(INPUT_GET, 'order') == 'asc' ? 'asc' : 'desc';
-//		$orderby = key_exists($get_orderby, $order_ar) ? $get_orderby: 'date_create';
 		$orderby = key_exists($get_orderby, $order_ar) ? $get_orderby: 'date_create';
+		
 
 		
 		
@@ -153,6 +154,9 @@ $sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.dat
 			case 'user_email':
 				//подправить чтоб выводился пользователь
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
+			case 'date_transaction':
+				//подправить чтоб выводился пользователь
+				return $item[$column_name] ? date("Y-m-d h:I:s",esc_attr($item[$column_name])) : '-';
         }
     }
 	
@@ -174,8 +178,8 @@ $sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.dat
 	 * Returns data from a custom column
 	 * @param string $item
 	 * @return string
-	 */	
-	public function column_date_create($item)
+	 */
+public function column_date_create($item)
 	{
 		return date(get_option('date_format', 'd.m.Y') . ' ' . get_option('time_format', 'H:i'), $item['date_create']);
 	}
