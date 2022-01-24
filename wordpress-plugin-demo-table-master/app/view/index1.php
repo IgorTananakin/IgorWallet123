@@ -9,8 +9,9 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 
-class Plg_Table_View_Admin_Data_Index extends WP_List_Table
+class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 {
+	
 	public $per_page;
 	
     /**
@@ -23,10 +24,9 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 		/** Determine the total number of records in the database */
 		$total_items = $wpdb -> get_var("
 			SELECT COUNT(`id`)
-			FROM `" . $wpdb -> prefix . "wallet`
+			FROM `" . $wpdb -> prefix . "wp_wallet_transaction`
 			{$this -> _getSqlWhere()}
 		");
-		
 		
 		/** Sets */
 		$per_page = $this -> get_items_per_page($this -> per_page, 10);
@@ -54,14 +54,14 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
     {
         return array(
             'id'		 => __('ID', 'lance'),
-//            'field_one'	 => __('Field one', 'lance'),
-//            'field_two'	 => __('Field two', 'lance'),
-			//'id_user'	 => __('User ID', 'lance'),
-			//'user'	 => __('User', 'lance'),
+//			'id_user'	 => __('User', 'lance'),
 			'user_email'	 => __('Пользователь', 'lance'),
-			'balance'	 => __('Баланс', 'lance'),
+			'id_match'	 => __('Матч', 'lance'),
+			//'balance'	 => __('Текущий баланс', 'lance'),
+			'total_spent'	 => __('Сумма списания', 'lance'),
 			
-            'date_create'=> __('Последние действие', 'lance'),
+//            'date_create'=> __('Время операции', 'lance'),
+			'date_transaction'=> __('Время транзакция', 'lance'),
         );
     }
  
@@ -71,16 +71,17 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
      */
     public function get_sortable_columns()
     {
-		
         return array(
 			'id'		 => array('id', false),
 //			'field_one'	 => array('field_one', false),
 //			'field_two'	 => array('field_two', false),
-			'id_user'	 => array('id_user', false),
-			//'user'	 => array('user', false),
-			'user'	 => array('user_email', false),
+//			'id_user'	 => array('id_user', false),
+			'user_email'	 => array('user_email', false),
 			'balance'	 => array('balance', false),
-			'date_create'=> array('date_create', false),
+			'total_spent'	 => array('total_spent', false),
+			//'date_create'=> array('date_create', false),
+			
+			'date_transaction'=> array('date_transaction', false),
 		);
     }
  
@@ -99,33 +100,27 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 		$get_orderby = filter_input(INPUT_GET, 'orderby');
 		$order = filter_input(INPUT_GET, 'order') == 'asc' ? 'asc' : 'desc';
 		$orderby = key_exists($get_orderby, $order_ar) ? $get_orderby: 'date_create';
+		
 
 		
+		
 //		SELECT *
-//			FROM `" . $wpdb -> prefix . "wallet_transaction`
-			
-			
+//			FROM `".$wpdb -> prefix. "wallet`
+//			{$this -> _getSqlWhere()}
+//			ORDER BY `{$orderby}` {$order}
+//			LIMIT ".(($this -> get_pagenum() - 1) * $per_page).", {$per_page}
 		
-		
-		
-		
-//рабочий		
-		$sql = " SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,wp_wallet.id_user, wp_users.user_email
-			FROM `" . $wpdb -> prefix . "wallet`
-			{$this -> _getSqlWhere()}
+$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create, wp_wallet.id_user, wp_wallet_transaction.total_spent, 		wp_wallet_transaction.date_transaction, wp_users.user_email 
+			FROM wp_wallet 
+			INNER JOIN wp_wallet_transaction 
+			ON wp_wallet.id = wp_wallet_transaction.wallet_id
 			INNER JOIN wp_users 
 			ON wp_wallet.id_user = wp_users.id
 			ORDER BY `{$orderby}` {$order}
-			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}	
+			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
 		";
-			
-		
-		
-		
-		
+		//var_dump($sql);
 		//var_dump($wpdb -> get_results($sql, ARRAY_A));
-		
-
 		return $wpdb -> get_results($sql, ARRAY_A);
     }
  
@@ -143,23 +138,25 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
      * @param  string $column_name the name of the current column
      * @return mixed
      */
-	//отвечает за вывод в таблице
+	
     public function column_default($item, $column_name)
     {
         switch($column_name)
 		{
 			case 'id':
-//			case 'field_two':
-//				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
 			case 'balance':
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
-			case 'user':
+			case 'total_spent':
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
+//			case 'id_user':
+//				//подправить чтоб выводился пользователь
+//				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
 			case 'user_email':
-				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
-			case 'id_user':
 				//подправить чтоб выводился пользователь
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
+			case 'date_transaction':
+				//подправить чтоб выводился пользователь
+				return $item[$column_name] ? date("Y-m-d h:I:s",esc_attr($item[$column_name])) : '-';
         }
     }
 	
@@ -168,31 +165,29 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 	 * @param string $item
 	 * @return string
 	 */
-//	public function column_field_one($item)
-//	{
-//		return esc_attr($item['field_one']).$this -> row_actions(array(
-//			'edit' => '<a href="' . add_query_arg(array('action' => 'edit', 'id' => $item['id'])) . '">' . __('edit', 'lance') . '</a>',
-//			'delete' => '<a href="' . add_query_arg(array('action' => 'delete', 'id' => $item['id'])) . '" onclick="return confirm(\'' . __('Delete?', 'lance') . '\')">' . __('delete', 'lance').'</a>',
-//		));
-//	}
-	
 	public function column_field_one($item)
 	{
-		return esc_attr($item['field_one']) . $this -> row_actions(array(
+		return esc_attr($item['field_one']).$this -> row_actions(array(
 			'edit' => '<a href="' . add_query_arg(array('action' => 'edit', 'id' => $item['id'])) . '">' . __('edit', 'lance') . '</a>',
 			'delete' => '<a href="' . add_query_arg(array('action' => 'delete', 'id' => $item['id'])) . '" onclick="return confirm(\'' . __('Delete?', 'lance') . '\')">' . __('delete', 'lance').'</a>',
 		));
 	}
 
+
 	/**
 	 * Returns data from a custom column
 	 * @param string $item
 	 * @return string
-	 */	
-	public function column_date_create($item)
+	 */
+public function column_date_create($item)
 	{
 		return date(get_option('date_format', 'd.m.Y') . ' ' . get_option('time_format', 'H:i'), $item['date_create']);
 	}
+	
+//	public function column_date_create($item)
+//	{
+//		return date(get_option('date_format', 'd.m.Y') . ' ' . get_option('time_format', 'H:i'), $item['date_transaction']);
+//	}
 	
 	/********************************************************************************************************************/
 	/************************************************* PRIVATE METHODS **************************************************/
@@ -212,30 +207,12 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 		
 		if($get_s)
 		{
-			$where = 'WHERE ' . join(' OR ', array(
-//				"`field_one` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-//				"`field_two` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-				"`id_user` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-				"`balance` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-			));
-		}
-		
-		return $where;
-	}
-	private function _getSqlWhere1()
-	{
-		global $wpdb;
-		
-		$where = '';
-		$get_s = filter_input(INPUT_GET, 's');
-		
-		if($get_s)
-		{
-			$where = 'WHERE ' . join(' OR ', array(
-//				"`field_one` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-//				"`field_two` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
-				"`total_spent` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
+			$where = 'WHERE '. join(' OR ', array(
+				"`field_one` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
+				"`field_two` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
+//				"`id_user` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
 //				"`balance` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
+				"`total_spent` LIKE  '%" . $wpdb -> _real_escape($get_s) . "%'",
 			));
 		}
 		

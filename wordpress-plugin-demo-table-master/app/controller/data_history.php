@@ -1,11 +1,11 @@
 <?php defined('ABSPATH') || exit;
 
-class Plg_Table_Controller_Data
+class Plg_Table_Controller_Data1
 {
 	/**
 	 * Table class
 	 */
-	private $Table;
+	private $Table1;
 	
 	/**
 	 * Validate form
@@ -21,46 +21,30 @@ class Plg_Table_Controller_Data
 		add_action('admin_head', array($this, 'styleIndex'));
    }
 	
-	public function action()
-	{
-		switch(filter_input(INPUT_GET, 'action'))
-		{
-			case 'add':
-				$this -> actionAdd();
-			break;
-			case 'edit':
-				$this -> actionEdit();
-			break;
-			case 'delete':
-				$this -> actionDelete();
-			break;
-			default:
-				$this -> actionIndex();
-			break;
-		}
-	}
 
+    public function action1()
+    {
+        switch(filter_input(INPUT_GET, 'action'))
+        {
+            case 'add':
+                $this -> actionAdd();
+                break;
+            case 'edit':
+                $this -> actionEdit();
+                break;
+            case 'delete':
+                $this -> actionDelete();
+                break;
+            default:
+                $this -> actionIndex1();
+                break;
+        }
+    }
 	
-//    public function action1()
-//    {
-//        switch(filter_input(INPUT_GET, 'action1'))
-//        {
-//            case 'add':
-//                $this -> actionAdd();
-//                break;
-//            case 'edit':
-//                $this -> actionEdit();
-//                break;
-//            case 'delete':
-//                $this -> actionDelete();
-//                break;
-//            default:
-//                $this -> actionIndex1();
-//                break;
-//        }
-//    }
 	
-	public function view()
+	
+	
+	public function view1()
 	{
 		switch(filter_input(INPUT_GET, 'action'))
 		{
@@ -71,27 +55,10 @@ class Plg_Table_Controller_Data
 				$this -> viewEdit();
 			break;
 			default:
-				$this -> viewIndex();
+				$this -> viewIndex1();
 			break;
 		}
 	}
-	
-	
-//	public function view1()
-//	{
-//		switch(filter_input(INPUT_GET, 'action'))
-//		{
-//			case 'add':
-//				$this -> viewAdd();
-//			break;
-//			case 'edit':
-//				$this -> viewEdit();
-//			break;
-//			default:
-//				$this -> viewIndex1();
-//			break;
-//		}
-//	}
 
 	
 	//===========================================================
@@ -100,17 +67,13 @@ class Plg_Table_Controller_Data
 	/**
 	 * List data
 	 */
-	public function actionIndex()
-	{
-		$this -> Table = new Plg_Table_View_Admin_Data_Index;
-		$this -> Table -> per_page = 25;
-	}
 	
-//	public function actionIndex1()
-//	{
-//		$this -> Table = new Plg_Table_View_Admin_Data_Index;
-//		$this -> Table -> per_page = 25;
-//	}
+	
+	public function actionIndex1()
+	{
+		$this -> Table1 = new Plg_Table_View_Admin_Data_Index1;
+		$this -> Table1 -> per_page = 25;
+	}
 	
 	/**
 	 * Data create
@@ -133,7 +96,9 @@ class Plg_Table_Controller_Data
 //					'field_one'   => $data_ar['field_one'],
 //					'field_two'   => $data_ar['field_two'],
 					'id_user'   => $data_ar['id_user'],
-					'balance'   => $data_ar['balance'],
+//                    'balance'   => $data_ar['balance'],
+					'total_spent'   => $data_ar['total_spent'],
+					
 					'date_create' => time(),
 				),
 				array('%s', '%s', '%d')
@@ -147,6 +112,7 @@ class Plg_Table_Controller_Data
 			Plg_Table_Helpers::flashShow('error', $this -> Validate -> getErrors());
 		}
 	}
+	
 	/**
 	 * Data update
 	 * 
@@ -166,12 +132,13 @@ class Plg_Table_Controller_Data
 			$data_ar = $this -> Validate -> getData();
 			
 			$wpdb -> update(
-				$wpdb -> prefix . 'wallet',
+				$wpdb -> prefix . 'wallet_transaction',
 				array(
-//					'field_one' => $data_ar['field_one'],
-//					'field_two' => $data_ar['field_two'],
+					'field_one' => $data_ar['field_one'],
+					'field_two' => $data_ar['field_two'],
 					'balance' => $data_ar['balance'],
-					'id_user' => $data_ar['id_user'],
+					
+					'total_spent' => $data_ar['total_spent'],
 				),
 				array('id' => $id),
 				array('%s', '%s'),
@@ -182,17 +149,9 @@ class Plg_Table_Controller_Data
 		}
 		else if(Plg_Table_Helpers::isRequestPost() == false)
 		{
-//			$data_ar = $wpdb -> get_row("SELECT *
-//				FROM `" . $wpdb -> prefix . "wallet`
-//				WHERE `id` = " . $id . "
-//				LIMIT 1", 
-//			ARRAY_A);
-			
-			$data_ar = $wpdb -> get_row("SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create, wp_wallet.id_user, wp_users.user_email
-				FROM wp_wallet
-                INNER JOIN wp_users 
-					ON wp_wallet.id_user = wp_users.id
-				WHERE wp_wallet.id = 1
+			$data_ar = $wpdb -> get_row("SELECT *
+				FROM `".$wpdb -> prefix . "wallet_transaction`
+				WHERE `id` = " . $id . "
 				LIMIT 1", 
 			ARRAY_A);
 
@@ -220,7 +179,7 @@ class Plg_Table_Controller_Data
 		global $wpdb;
 		
 		$wpdb -> delete(
-			$wpdb -> prefix. 'wallet',
+			$wpdb -> prefix. 'wallet_transaction',
 			array('id' => filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)),
 			array('%d')
 		);
@@ -250,64 +209,33 @@ class Plg_Table_Controller_Data
 	/**
 	 * List data
 	 */
-	public function viewIndex()
+	
+	
+	
+	public function viewIndex1()
 	{
-		Plg_Table_Controller_Data::InsertNewUser();
-		
-        $this -> Table -> prepare_items();
+        $this -> Table1 -> prepare_items();
 		
 		$btn_add_url = http_build_query(array(
 			'page' => filter_input(INPUT_GET, 'page'),
 			'action' => 'add'
 		));
+       
         ?>
-            <div class="wrap">
-                <h2>
-					<?php echo __('Добавить средств', 'lance') ?>
-					<a href="?<?php echo $btn_add_url ?>" class="page-title-action"><?php echo __('Добавить', 'lance') ?></a>
-				</h2>
-				<form method="get">
-					<input type="hidden" name="page" value="<?php echo filter_input(INPUT_GET, 'page') ?>" />
-					<?php $this -> Table -> search_box(__('Search', 'lance'), 'search_id'); ?>
-					<?php $this -> Table -> display(); ?>
-				</form>
-            </div>
+        <div class="wrap">
+            <h2>
+                <?php echo __('История операций', 'lance') ?>
+                
+            </h2>
+            <form method="get">
+                
+               
+                <?php $this -> Table1 -> display(); ?>
+            </form>
+        </div>
         <?php
-		
-		
-		
+       
 	}
-	
-	
-	public static function InsertNewUser() {
-		global $wpdb;//получаю объект для работы с таблицами
-		//действия если содержится записи
-		$sql = "SELECT id FROM wp_wallet"; //получаю все текущие кошельки
-		$result = $wpdb -> get_results($sql, ARRAY_A);//выполняю запрос
-		$issetWalletUser = [];//преобразую массив где число значение, а не id значение
-		//$issetWalletUser массив уже существующих пользователей
-		foreach ($result as $res) {
-			$issetWalletUser[] = $res['id'];
-		}
-
-		$sql = "SELECT ID FROM wp_users"; //получаю всех текущих пользователей
-		$result = $wpdb -> get_results($sql, ARRAY_A);
-		$dats = [];//преобразую массив где число значение, а не id значение
-		foreach ($result as $data)
-		{
-			$dats[] = $data['ID'];	
-		}
-		
-		$result1 = array_diff($dats,$issetWalletUser);
-		//вычитаю массив всех пользователей из массива существующих пользователей у которых есть кошелёк
-		foreach ($result1 as $dat) //остаток из разницы вставляю новые записи
-		{
-			$wpdb->insert( 'wp_wallet', [ 'id_user' => $dat] );
-		}
-	}
-	
-	
-	
 	
 	/**
 	 * Data create
@@ -342,23 +270,22 @@ class Plg_Table_Controller_Data
 	{
 		return Plg_Table_Validate::factory(wp_unslash($_POST))
 		-> setLabels(array(
-//			'field_one' => __('Field one', 'lance'),
-//			'field_two' => __('Field two', 'lance'),
-			'id_user' => __('User', 'lance'),
+			
+			'id_user' => __('User ID', 'lance'),
+			'user' => __('User', 'lance'),
+//			'balance' => __('Balance', 'lance'),
 			'balance' => __('Balance', 'lance'),
+			'total_spent' => __('Сумма списания', 'lance'),
 		))
 		
-//		-> setFilters('field_one', array(
-//			'trim' => array(),
-//			'strip_tags' => array(),
-//		))
-//				
-//		-> setFilters('field_two', array(
-//			'trim' => array(),
-//			'strip_tags' => array(),
-//		))
+		
 			
 		-> setFilters('id_user', array(
+			'trim' => array(),
+			'strip_tags' => array(),
+		))
+		
+		-> setFilters('user', array(
 			'trim' => array(),
 			'strip_tags' => array(),
 		))
@@ -368,19 +295,35 @@ class Plg_Table_Controller_Data
 			'strip_tags' => array(),
 		))
 		
-//		-> setRules('field_one', array(
-//			'required' => array(),
-//			'max_length' => array(225),
-//		))
-//		-> setRules('field_two', array(
-//			'required' => array(),
-//			'max_length' => array(225),
-//		))
+		-> setFilters('total_spent', array(
+			'trim' => array(),
+			'strip_tags' => array(),
+		))
+		
+		-> setRules('field_one', array(
+			'required' => array(),
+			'max_length' => array(225),
+		))
+		-> setRules('field_two', array(
+			'required' => array(),
+			'max_length' => array(225),
+		))
 		-> setRules('id_user', array(
 			'required' => array(),
 			'max_length' => array(225),
 		))
+		
+		-> setRules('user', array(
+			'required' => array(),
+			'max_length' => array(225),
+		))
+			
 		-> setRules('balance', array(
+			'required' => array(),
+			'max_length' => array(225),
+		))
+			
+		-> setRules('total_spent', array(
 			'required' => array(),
 			'max_length' => array(225),
 		));
