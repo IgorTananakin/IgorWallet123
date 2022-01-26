@@ -368,6 +368,7 @@ function plg_table_activation()
 		`id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 		`wallet_id` int(11) unsigned NOT NULL default '0',
 		`total_spent` int(11) unsigned NOT NULL default '0',
+		`match_id` int(11) unsigned NOT NULL default '0',
 		`date_transaction` INT(10) UNSIGNED NOT NULL
 	) {$wpdb -> get_charset_collate()};");
 	

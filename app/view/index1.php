@@ -56,7 +56,7 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
             'id'		 => __('ID', 'lance'),
 //			'id_user'	 => __('User', 'lance'),
 			'user_email'	 => __('Пользователь', 'lance'),
-			'id_match'	 => __('Матч', 'lance'),
+			'match_id'	 => __('ID матча', 'lance'),
 			//'balance'	 => __('Текущий баланс', 'lance'),
 			'total_spent'	 => __('Сумма списания', 'lance'),
 			
@@ -76,6 +76,7 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 //			'field_one'	 => array('field_one', false),
 //			'field_two'	 => array('field_two', false),
 //			'id_user'	 => array('id_user', false),
+			'match_id'	 => array('match_id', false),
 			'user_email'	 => array('user_email', false),
 			'balance'	 => array('balance', false),
 			'total_spent'	 => array('total_spent', false),
@@ -110,14 +111,14 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 //			ORDER BY `{$orderby}` {$order}
 //			LIMIT ".(($this -> get_pagenum() - 1) * $per_page).", {$per_page}
 		
-$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create, wp_wallet.id_user, wp_wallet_transaction.total_spent, 		wp_wallet_transaction.date_transaction, wp_users.user_email 
-			FROM wp_wallet 
-			INNER JOIN wp_wallet_transaction 
-			ON wp_wallet.id = wp_wallet_transaction.wallet_id
-			INNER JOIN wp_users 
-			ON wp_wallet.id_user = wp_users.id
-			ORDER BY `{$orderby}` {$order}
-			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
+$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,  wp_wallet_transaction.total_spent,wp_wallet_transaction.date_transaction, wp_wallet_transaction.match_id, wp_users.user_email 
+		FROM wp_wallet 
+		INNER JOIN wp_wallet_transaction 
+		ON wp_wallet.id = wp_wallet_transaction.wallet_id
+		INNER JOIN wp_users 
+		ON wp_wallet_transaction.wallet_id = wp_users.ID
+		ORDER BY `{$orderby}` {$order}
+		LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
 		";
 		//var_dump($sql);
 		//var_dump($wpdb -> get_results($sql, ARRAY_A));
@@ -151,6 +152,9 @@ $sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.dat
 //			case 'id_user':
 //				//подправить чтоб выводился пользователь
 //				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
+			case 'match_id':
+				//подправить чтоб выводился пользователь
+				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
 			case 'user_email':
 				//подправить чтоб выводился пользователь
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';

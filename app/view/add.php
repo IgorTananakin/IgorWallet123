@@ -15,25 +15,26 @@ $users = get_users();
 <?php
 //страница блок добавление средств
 function addMoney($users) {
-	echo '<p>dsfsfsefese</p>';
 	//проверка если форма не заполнена списание средств и запись в базу
 	if ( isset($_POST['submit1'])) 
 	{
-		var_dump('eegtrrere');
-//		global $wpdb;
-//		$balance = (int)$_POST['balance'];
-//		$table_name_wallet = $wpdb->prefix . "wallet";
-//		$wallet = $wpdb->get_results( "SELECT * FROM $table_name_wallet WHERE id_user = " . get_current_user_id() . "", ARRAY_A);
-//		// get_current_user_id() получение текущего пользователя
-//		if ($balance > 0) {
-//			foreach ( $wallet as $wal ) {
-//					//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
-//				$balance = $balance + (int)$wal['balance'];
-//				$wpdb->update($table_name_wallet,[ 'balance' => $balance], [ 'id_user' => get_current_user_id() ]);
-//			}
-//		} else {
-//			echo "Ошибка записи";
-//		}
+		global $wpdb;
+		$balance = (int)$_POST['balance'];
+		$id_user = (int)$_POST['id_user'];
+		$table_name_wallet = $wpdb->prefix . "wallet";
+		$wallet = $wpdb->get_results( "SELECT * FROM $table_name_wallet WHERE id_user = " . $id_user . "", ARRAY_A);
+		// get_current_user_id() получение текущего пользователя
+		if ($balance > 0) {
+			foreach ( $wallet as $wal ) {
+				
+					//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
+				$balance = $balance + (int)$wal['balance'];
+				$wpdb->update($table_name_wallet,[ 'balance' => $balance, 'date_create' => time()], [ 'id_user' => $id_user ]);
+				?><script>alert('Средства добавлены');</script><?php
+			}
+		} else {
+			?><script>alert('Ошибка записи');</script><?php
+		}
 	}
 	
 
@@ -51,11 +52,9 @@ function addMoney($users) {
 					
 					<select name="id_user" id="">
 					<?php 
-						var_dump($users);
 						foreach ( $users as $key ) {
 							foreach ($key as $data) {
-								if($data->user_login !== NULL){
-									var_dump(strval($data->ID));
+								if($data->user_login !== NULL) {
 						?>
 									<option value="<?php echo strval($data->ID); ?>">
 										<?php echo $data->user_login;?>

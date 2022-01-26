@@ -103,7 +103,7 @@ class Plg_Table_Controller_Data
 	public function actionIndex()
 	{
 		$this -> Table = new Plg_Table_View_Admin_Data_Index;
-		$this -> Table -> per_page = 25;
+		$this -> Table -> per_page = 10;
 	}
 	
 //	public function actionIndex1()
@@ -117,35 +117,31 @@ class Plg_Table_Controller_Data
 	 * 
 	 * @global wpdb $wpdb
 	 */
+    //action для добавления средств
 	public function actionAdd()
 	{
-		global $wpdb;
 		
-		$this -> Validate = $this -> _validate();
-
-		if(Plg_Table_Helpers::isRequestPost() && $this -> Validate -> validate())
-		{
-			$data_ar = $this -> Validate -> getData();
-			
-			$wpdb -> insert(
-				$wpdb -> prefix . 'wallet',
-				array(
-//					'field_one'   => $data_ar['field_one'],
-//					'field_two'   => $data_ar['field_two'],
-					'id_user'   => $data_ar['id_user'],
-					'balance'   => $data_ar['balance'],
-					'date_create' => time(),
-				),
-				array('%s', '%s', '%d')
-			);
-			
-			Plg_Table_Helpers::flashRedirect(add_query_arg(array('action' => 'add')), __('Data created', 'lance'));
-		}
+//			if ( isset($_POST['submit1'])) 
+//			{
+//				var_dump('actionAdd');
+//				global $wpdb;
+//				$balance = (int)$_POST['balance'];
+//				$id_user = (int)$_POST['id_user'];
+//				var_dump($id_user);
+//				$table_name_wallet = $wpdb->prefix . "wallet";
+//				$wallet = $wpdb->get_results( "SELECT * FROM $table_name_wallet WHERE id_user = " . $id_user . "", ARRAY_A);
+//				// get_current_user_id() получение текущего пользователя
+//				if ($balance > 0) {
+//					foreach ( $wallet as $wal ) {
+//							//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
+//						$balance = $balance + (int)$wal['balance'];
+//						$wpdb->update($table_name_wallet,[ 'balance' => $balance], [ 'id_user' => get_current_user_id() ]);
+//					}
+//				} else {
+//					echo "Ошибка записи";
+//				}
+//			}
 		
-		if($this -> Validate -> isErrors())
-		{
-			Plg_Table_Helpers::flashShow('error', $this -> Validate -> getErrors());
-		}
 	}
 	/**
 	 * Data update
@@ -253,6 +249,7 @@ class Plg_Table_Controller_Data
 	public function viewIndex()
 	{
 		Plg_Table_Controller_Data::InsertNewUser();
+		//мой статический метод для вставки только что созданных пользователей 
 		
         $this -> Table -> prepare_items();
 		
@@ -279,8 +276,14 @@ class Plg_Table_Controller_Data
 	}
 	
 	
-	public static function InsertNewUser() {
+	public static function InsertNewUser() { //для автоматического создания новой записи в кошельке 
+		//при условии что пользователь существует 
 		global $wpdb;//получаю объект для работы с таблицами
+		
+		
+
+	
+		
 		//действия если содержится записи
 		$sql = "SELECT id FROM wp_wallet"; //получаю все текущие кошельки
 		$result = $wpdb -> get_results($sql, ARRAY_A);//выполняю запрос
@@ -316,7 +319,7 @@ class Plg_Table_Controller_Data
 	{
 		echo Plg_Table_Helpers::view(PLG_TABLE__PATH . 'app/view/add', array(
 			'page_title' => __('Добавление средств', 'lance'),
-			'form_actiion' => add_query_arg(array('action' => 'add')),
+			'form_action' => add_query_arg(array('action' => 'add')),
 			'Validate' => $this -> Validate,
 		));
 	}
