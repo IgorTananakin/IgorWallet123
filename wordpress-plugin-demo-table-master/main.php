@@ -178,6 +178,146 @@ add_action( 'admin_print_footer_scripts-edit.php', function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////
+
+add_action( 'init', 'register_post_types' );
+function register_post_types(){
+	register_post_type( 'post_type_name', [
+		'label'  => null,
+		'labels' => [
+			'name'               => 'Транзакции', // основное название для типа записи
+			'singular_name'      => 'Транзакции', // название для одной записи этого типа
+			//'add_new'            => 'Добавить ____1', // для добавления новой записи
+			'add_new_item'       => 'Добавление ____', // заголовка у вновь создаваемой записи в админ-панели.
+			'edit_item'          => 'Редактирование ____', // для редактирования типа записи
+			'new_item'           => 'Новое ____', // текст новой записи
+			'view_item'          => 'Смотреть ____', // для просмотра записи этого типа.
+			'search_items'       => 'Искать ____', // для поиска по этим типам записи
+			'not_found'          => 'Не найдено', // если в результате поиска ничего не было найдено
+			'not_found_in_trash' => 'Не найдено в корзине', // если не было найдено в корзине
+			'parent_item_colon'  => '', // для родителей (у древовидных типов)
+			'menu_name'          => 'Транзакции1', // название меню
+		],
+		'description'         => '',
+		'public'              => true,
+		// 'publicly_queryable'  => null, // зависит от public
+		// 'exclude_from_search' => null, // зависит от public
+		// 'show_ui'             => null, // зависит от public
+		// 'show_in_nav_menus'   => null, // зависит от public
+		'show_in_menu'        => null, // показывать ли в меню адмнки
+		// 'show_in_admin_bar'   => null, // зависит от show_in_menu
+		'show_in_rest'        => null, // добавить в REST API. C WP 4.7
+		'rest_base'           => null, // $post_type. C WP 4.7
+		'menu_position'       => null,
+		'menu_icon'           => null,
+		//'capability_type'   => 'post',
+		//'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
+		//'map_meta_cap'      => null, // Ставим true чтобы включить дефолтный обработчик специальных прав
+		'hierarchical'        => false,
+		'supports'            => [ 'title', 'editor' ], // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+		'taxonomies'          => [],
+		'has_archive'         => false,
+		'rewrite'             => true,
+		'query_var'           => true,
+	] );
+}
+
+// Регистрируем свои колонки (столбцы)
+//post_type_name имя поста записи
+add_filter ( 'manage_post_type_name_posts_columns', function ( $columns ) {
+    $my_columns = [//массив колонок
+		'ID' => 'ID',
+		'User' => 'Пользователь',
+		'Total_spent' => 'Сумма списания',
+		'Date_transaction' => 'Последняя операция',
+    ];
+	//array_slice для порядка колонок
+    return array_slice( $columns, 0, 2 ) + $my_columns + $columns;
+} );
+
+
+add_theme_support('post-thumbnails', array('post_type_name','post', 'page', 'slider', 'portfolio', 'book') ); //вставка изображения для типов
+
+
+ //Выводим контент для каждого из своих столбцов. Обязательно.
+add_action ( 'manage_post_type_name_posts_custom_column', function ( $column_name) {
+	
+	global $wpdb;
+	
+	$sql = "SELECT  wp_wallet_transaction.id, wp_wallet_transaction.total_spent, wp_wallet_transaction.date_transaction, wp_wallet_transaction.match_id, wp_users.user_email 
+FROM wp_wallet_transaction
+INNER JOIN wp_users 
+ON wp_users.ID = wp_wallet_transaction.wallet_id
+WHERE wp_users.ID = 1 
+		";
+	
+	$result = $wpdb -> get_results($sql, ARRAY_A);
+	
+	foreach ($result as $data) 
+	{
+//		$balance = $data['balance'];
+		$id_transaction = $data['id'];
+		$user_email = $data['user_email'];
+		$total_spent = $data['total_spent'];
+		$date_transaction = $data['date_transaction'];
+		
+			
+			//var_dump($data);
+			//$date_transaction = $data['balance'];
+	}
+	
+	if ( $column_name === 'ID' ) // ID
+ 	{
+ 		echo $id_transaction;
+ 	}
+	if ( $column_name === 'User' ) // колонка User
+	{
+		echo $user_email;
+	}
+	if ( $column_name === 'Total_spent' ) // колонка BAlance
+	{
+		echo $total_spent . ' руб';
+	}
+	if ( $column_name === 'Date_transaction' ) // колонка Последняя операция
+	{
+		echo date("Y-m-d h:I:s",$date_transaction);
+		//echo get_post_meta( get_the_ID(), 'Зарплата', true );//заменить post_meta на дуругую таблицу
+	}
+
+}, 10, 2 );//end add_action
+
+// Выводим стили для своих столбцов. Необязательно.
+add_action( 'admin_print_footer_scripts-edit.php', function () {
+    ?>
+    <style>
+
+        .column-image img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+    <?php
+} );
+
+
+//////////////////////////////////////
+
+
+
 // add_action( 'init', 'register_post_types' );
 // function register_post_types(){
 // 	register_post_type( 'igor_post', [

@@ -103,7 +103,7 @@ class Plg_Table_Controller_Data
 	public function actionIndex()
 	{
 		$this -> Table = new Plg_Table_View_Admin_Data_Index;
-		$this -> Table -> per_page = 25;
+		$this -> Table -> per_page = 10;
 	}
 	
 //	public function actionIndex1()
@@ -120,7 +120,7 @@ class Plg_Table_Controller_Data
     //action для добавления средств
 	public function actionAdd()
 	{
-		echo "actionAdd";
+		
 //			if ( isset($_POST['submit1'])) 
 //			{
 //				var_dump('actionAdd');
@@ -279,6 +279,11 @@ class Plg_Table_Controller_Data
 	public static function InsertNewUser() { //для автоматического создания новой записи в кошельке 
 		//при условии что пользователь существует 
 		global $wpdb;//получаю объект для работы с таблицами
+		
+		
+
+	
+		
 		//действия если содержится записи
 		$sql = "SELECT id FROM wp_wallet"; //получаю все текущие кошельки
 		$result = $wpdb -> get_results($sql, ARRAY_A);//выполняю запрос
