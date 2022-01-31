@@ -107,26 +107,40 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 			
 		
 		
+		$user = wp_get_current_user();//получение текущего пользователя объект 
+		//проверка какая роль
 		
-		
-//рабочий		
-		$sql = " SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,wp_wallet.id_user, wp_users.user_email
+		if (Plg_Table_Controller_Data::is_user_role('administrator', $user->ID)) {
+			
+			$sql = " SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,wp_wallet.id_user, wp_users.user_email
+				FROM `" . $wpdb -> prefix . "wallet`
+				{$this -> _getSqlWhere()}
+				INNER JOIN wp_users 
+				ON wp_wallet.id_user = wp_users.id
+				ORDER BY `{$orderby}` {$order}
+				LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}	
+			";
+			
+		} else {
+
+			$sql = " SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,wp_wallet.id_user, wp_users.user_email
 			FROM `" . $wpdb -> prefix . "wallet`
 			{$this -> _getSqlWhere()}
 			INNER JOIN wp_users 
 			ON wp_wallet.id_user = wp_users.id
-			ORDER BY `{$orderby}` {$order}
-			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}	
-		";
-			
+			WHERE wp_wallet.id_user = $user->ID
+			";
+		}
 		
 		
+		//var_dump($sql );
 		
-		
-		//var_dump($wpdb -> get_results($sql, ARRAY_A));
+//		var_dump($wpdb -> get_results($sql, ARRAY_A));
 		
 
 		return $wpdb -> get_results($sql, ARRAY_A);
+		
+		
     }
  
 	/**

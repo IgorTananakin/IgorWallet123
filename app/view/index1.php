@@ -110,18 +110,41 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 //			{$this -> _getSqlWhere()}
 //			ORDER BY `{$orderby}` {$order}
 //			LIMIT ".(($this -> get_pagenum() - 1) * $per_page).", {$per_page}
+
 		
-$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,  wp_wallet_transaction.total_spent,wp_wallet_transaction.date_transaction, wp_wallet_transaction.match_id, wp_users.user_email 
-		FROM wp_wallet 
-		INNER JOIN wp_wallet_transaction 
-		ON wp_wallet.id = wp_wallet_transaction.wallet_id
-		INNER JOIN wp_users 
-		ON wp_wallet_transaction.wallet_id = wp_users.ID
-		ORDER BY `{$orderby}` {$order}
-		LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
-		";
-		//var_dump($sql);
-		//var_dump($wpdb -> get_results($sql, ARRAY_A));
+		
+		$user = wp_get_current_user();//получение текущего пользователя объект 
+		//проверка какая роль
+		
+		if (Plg_Table_Controller_Data::is_user_role('administrator', $user->ID)) {
+		
+			$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,  wp_wallet_transaction.total_spent,wp_wallet_transaction.date_transaction, wp_wallet_transaction.match_id, wp_users.user_email 
+			FROM wp_wallet 
+			INNER JOIN wp_wallet_transaction 
+			ON wp_wallet.id = wp_wallet_transaction.wallet_id
+			INNER JOIN wp_users 
+			ON wp_wallet_transaction.wallet_id = wp_users.ID
+			ORDER BY `{$orderby}` {$order}
+			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
+			";
+		
+		} else {
+			$sql = "SELECT wp_wallet.id, wp_wallet.id_user, wp_wallet.balance, wp_wallet.date_create,  wp_wallet_transaction.total_spent,wp_wallet_transaction.date_transaction, wp_wallet_transaction.match_id, wp_users.user_email 
+			FROM wp_wallet 
+			INNER JOIN wp_wallet_transaction 
+			ON wp_wallet.id = wp_wallet_transaction.wallet_id
+			INNER JOIN wp_users 
+			ON wp_wallet_transaction.wallet_id = wp_users.ID
+			WHERE wp_wallet_transaction.wallet_id = $user->ID
+			ORDER BY `{$orderby}` {$order}
+			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
+			";
+		}
+		
+		
+		
+//		var_dump($sql);
+//		var_dump($wpdb -> get_results($sql, ARRAY_A));
 		return $wpdb -> get_results($sql, ARRAY_A);
     }
  

@@ -239,6 +239,21 @@ class Plg_Table_Controller_Data
 		echo '</style>';
 	}
 	
+	
+	
+	
+	//функция проверки роли
+	public static function is_user_role($role, $user_id = null) {
+			$user = is_numeric($user_id) ? get_userdata($user_id) : wp_get_current_user();
+
+			if (!$user) {
+				return false;
+			}
+
+			return in_array($role, (array) $user->roles);
+		}
+	
+	
 	//===========================================================
 	// Views
 	//===========================================================
@@ -248,18 +263,33 @@ class Plg_Table_Controller_Data
 	 */
 	public function viewIndex()
 	{
-		Plg_Table_Controller_Data::InsertNewUser();
-		//мой статический метод для вставки только что созданных пользователей 
 		
-        $this -> Table -> prepare_items();
+		
+		$user = wp_get_current_user();//получение текущего пользователя объект 
+		//выявление текущей роли
+		
+		
+		/////
+		$this -> Table -> prepare_items();
 		
 		$btn_add_url = http_build_query(array(
 			'page' => filter_input(INPUT_GET, 'page'),
 			'action' => 'add'
 		));
+		//отрисовка wallet
         ?>
-            <div class="wrap">
-                <h2>
+			<div class="wrap">
+		
+		<?php
+		//проверка какая роль
+		if (Plg_Table_Controller_Data::is_user_role('administrator', $user->ID)) {
+		 	//есть доступ (admin)
+			
+			Plg_Table_Controller_Data::InsertNewUser();
+			//мой статический метод для вставки только что созданных пользователей 
+			
+			?>
+				<h2>
 					<?php echo __('Добавить средств', 'lance') ?>
 					<a href="?<?php echo $btn_add_url ?>" class="page-title-action"><?php echo __('Добавить', 'lance') ?></a>
 				</h2>
@@ -267,10 +297,19 @@ class Plg_Table_Controller_Data
 					<input type="hidden" name="page" value="<?php echo filter_input(INPUT_GET, 'page') ?>" />
 					<?php $this -> Table -> search_box(__('Search', 'lance'), 'search_id'); ?>
 					<?php $this -> Table -> display(); ?>
+			<?php
+			
+			
+		 } else {
+		 //нет доступа
+		 
+        ?>
+				
+					<?php $this -> Table -> display(); ?>
 				</form>
             </div>
         <?php
-		
+		}
 		
 		
 	}

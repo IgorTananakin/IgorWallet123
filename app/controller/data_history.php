@@ -72,7 +72,7 @@ class Plg_Table_Controller_Data1
 	public function actionIndex1()
 	{
 		$this -> Table1 = new Plg_Table_View_Admin_Data_Index1;
-		$this -> Table1 -> per_page = 250;
+		$this -> Table1 -> per_page = 25;
 	}
 	
 	/**
