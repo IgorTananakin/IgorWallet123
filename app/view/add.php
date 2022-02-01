@@ -10,8 +10,6 @@ $users = get_users();
 	</h2>
 
 
-
-
 <?php
 //страница блок добавление средств
 function addMoney($users) {
@@ -26,10 +24,10 @@ function addMoney($users) {
 		// get_current_user_id() получение текущего пользователя
 		if ($balance > 0) {
 			foreach ( $wallet as $wal ) {
-				
-					//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
+				//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
 				$balance = $balance + (int)$wal['balance'];
 				$wpdb->update($table_name_wallet,[ 'balance' => $balance, 'date_create' => time()], [ 'id_user' => $id_user ]);
+				//Модальное окно средства списаны
 				?><script>alert('Средства добавлены');</script><?php
 			}
 		} else {
@@ -40,8 +38,6 @@ function addMoney($users) {
 
 ?>
 
-
-	
 	<form action="" method="post" id="my_form" onsubmit="">
 		<table class="form-table">
 			<tr>
@@ -52,7 +48,8 @@ function addMoney($users) {
 					
 					<select name="id_user" id="">
 					<?php 
-						foreach ( $users as $key ) {
+						//способ который сделал как с сылками html->php->mysql(update) без классов
+						foreach ($users as $key ) {
 							foreach ($key as $data) {
 								if($data->user_login !== NULL) {
 						?>
@@ -60,9 +57,9 @@ function addMoney($users) {
 										<?php echo $data->user_login;?>
 									</option>
 						<?php
-																	}
-															}
-														}
+																}
+													}
+												  }
 																?>
 					</select>
                     
@@ -75,29 +72,10 @@ function addMoney($users) {
 				</td>
 			</tr>
 		</table>
-		<?php 
-				//submit_button();
-				//старый метод добавления нового кошелька
-	
-				//способ который сделал с сылками html->php->mysql(update)
-		
-		
-		?>
 		
 		<button name="submit1" >Добавить средств</button>
 	</form>
-<!--
-	<form action="" method="post" id="my_form" onsubmit="">
-		<label for="user">Выберите матч</label>
-		<select name="price_match" id="">
-			<option value="20">Матч лиги A 20 руб</option>
-			<option value="10">Матч лиги B 10 руб</option>
-		</select>
-		
-		
-		<button name="submit" >Добавить средств</button>
-	</form>
--->
+
 
 <?php
 

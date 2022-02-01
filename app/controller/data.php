@@ -121,26 +121,7 @@ class Plg_Table_Controller_Data
 	public function actionAdd()
 	{
 		
-//			if ( isset($_POST['submit1'])) 
-//			{
-//				var_dump('actionAdd');
-//				global $wpdb;
-//				$balance = (int)$_POST['balance'];
-//				$id_user = (int)$_POST['id_user'];
-//				var_dump($id_user);
-//				$table_name_wallet = $wpdb->prefix . "wallet";
-//				$wallet = $wpdb->get_results( "SELECT * FROM $table_name_wallet WHERE id_user = " . $id_user . "", ARRAY_A);
-//				// get_current_user_id() получение текущего пользователя
-//				if ($balance > 0) {
-//					foreach ( $wallet as $wal ) {
-//							//привожу к типу, получаю поле объекта, скаладываю текущий баланс с имеющимся
-//						$balance = $balance + (int)$wal['balance'];
-//						$wpdb->update($table_name_wallet,[ 'balance' => $balance], [ 'id_user' => get_current_user_id() ]);
-//					}
-//				} else {
-//					echo "Ошибка записи";
-//				}
-//			}
+
 		
 	}
 	/**
@@ -296,7 +277,7 @@ class Plg_Table_Controller_Data
 				<form method="get">
 					<input type="hidden" name="page" value="<?php echo filter_input(INPUT_GET, 'page') ?>" />
 					<?php $this -> Table -> search_box(__('Search', 'lance'), 'search_id'); ?>
-					<?php $this -> Table -> display(); ?>
+					<?php $this -> Table -> display(); //вывод таблицы?>
 			<?php
 			
 			
@@ -305,7 +286,7 @@ class Plg_Table_Controller_Data
 		 
         ?>
 				
-					<?php $this -> Table -> display(); ?>
+					<?php $this -> Table -> display(); //вывод таблицы?>
 				</form>
             </div>
         <?php
@@ -315,13 +296,11 @@ class Plg_Table_Controller_Data
 	}
 	
 	
-	public static function InsertNewUser() { //для автоматического создания новой записи в кошельке 
+	public static function InsertNewUser() { 
+		//для автоматического создания новой записи в кошельке 
 		//при условии что пользователь существует 
+		
 		global $wpdb;//получаю объект для работы с таблицами
-		
-		
-
-	
 		
 		//действия если содержится записи
 		$sql = "SELECT id FROM wp_wallet"; //получаю все текущие кошельки

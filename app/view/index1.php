@@ -101,18 +101,7 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 		$get_orderby = filter_input(INPUT_GET, 'orderby');
 		$order = filter_input(INPUT_GET, 'order') == 'asc' ? 'asc' : 'desc';
 		$orderby = key_exists($get_orderby, $order_ar) ? $get_orderby: 'date_create';
-		
 
-		
-		
-//		SELECT *
-//			FROM `".$wpdb -> prefix. "wallet`
-//			{$this -> _getSqlWhere()}
-//			ORDER BY `{$orderby}` {$order}
-//			LIMIT ".(($this -> get_pagenum() - 1) * $per_page).", {$per_page}
-
-		
-		
 		$user = wp_get_current_user();//получение текущего пользователя объект 
 		//проверка какая роль
 		
@@ -144,7 +133,6 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 		
 		
 //		var_dump($sql);
-//		var_dump($wpdb -> get_results($sql, ARRAY_A));
 		return $wpdb -> get_results($sql, ARRAY_A);
     }
  
@@ -183,7 +171,7 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 				return $item[$column_name] ? esc_attr($item[$column_name]) : '-';
 			case 'date_transaction':
 				//подправить чтоб выводился пользователь
-				return $item[$column_name] ? date("Y-m-d h:I:s",esc_attr($item[$column_name])) : '-';
+				return $item[$column_name] ? date("d.m.y h:I:s",esc_attr($item[$column_name])) : '-';
         }
     }
 	

@@ -71,16 +71,13 @@ if (isset($price_match) ) {
 
 		//средства списаны
 		$resMessage = ['isSuccess' => 1];
-//		var_dump(json_encode($resMessage, JSON_UNESCAPED_UNICODE));
 		echo json_encode($resMessage, JSON_UNESCAPED_UNICODE);
 		
 	} else if ($key_transaction == 2) {
 		$resMessage = ['isSuccess' => 2];
-//		var_dump(json_encode($resMessage, JSON_UNESCAPED_UNICODE));
 		echo json_encode($resMessage, JSON_UNESCAPED_UNICODE);
 	} else if ($key_transaction == 3) {
 				$resMessage = ['isSuccess' => 3];
-//		var_dump(json_encode($resMessage, JSON_UNESCAPED_UNICODE));
 		echo json_encode($resMessage, JSON_UNESCAPED_UNICODE);
 	}
 

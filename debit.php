@@ -13,19 +13,6 @@
       box-sizing: border-box;
     }
 
-/*
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      font-size: 19px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #212529;
-      text-align: left;
-      background-color: #fff;
-    }
-*/
-
     .modal__backdrop {
       position: fixed;
       top: 0;
@@ -168,13 +155,7 @@
       border-color: #dae0e5;
     }
 		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+/*	второе модальное окно*/
 		  
 		  /* свойства модального окна по умолчанию */
     .modal1 {
@@ -324,18 +305,15 @@
   <div class="message"></div>
 	
 	<div class="container1">
-    <div style="text-align: center;">
-      <a href="#openModal">Открыть модальное окно</a>
-    </div>
     <div id="openModal" class="modal1">
       <div class="modal-dialog">
         <div class="modal-content1">
           <div class="modal-header1">
-            <h3 class="modal-title1">Название</h3>
+            <h3 class="modal-title1">Операция</h3>
             <a href="#close" title="Close" class="close1">×</a>
           </div>
           <div class="modal-body1">
-            Средства списаны
+<!--            Средства списаны-->
           </div>
         </div>
       </div>
@@ -343,155 +321,10 @@
   </div>
 
 	
-<script>
-//    document.addEventListener("DOMContentLoaded", function () {
-//      var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
-//      console.log(scrollbar);
-//      document.querySelector('[href="#openModal"]').addEventListener('click', function () {
-//        document.body.style.overflow = 'hidden';
-//        document.querySelector('#openModal').style.marginLeft = scrollbar;
-//      });
-//      document.querySelector('[href="#close"]').addEventListener('click', function () {
-//        document.body.style.overflow = 'visible';
-//        document.querySelector('#openModal').style.marginLeft = '0px';
-//      });
-//    });
-  </script>	
+
 	
 	
-  <script>
-//    // полифилл CustomEvent для IE11
-//    (function () {
-//      if (typeof window.CustomEvent === "function") return false;
-//      function CustomEvent(event, params) {
-//        params = params || { bubbles: false, cancelable: false, detail: null };
-//        var evt = document.createEvent('CustomEvent');
-//        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-//        return evt;
-//      }
-//      window.CustomEvent = CustomEvent;
-//    })();
-//
-//    $modal = function (options) {
-//      var
-//        _elemModal,
-//        _eventShowModal,
-//        _eventHideModal,
-//        _hiding = false,
-//        _destroyed = false,
-//        _animationSpeed = 200;
-//
-//      function _createModal(options) {
-//        var
-//          elemModal = document.createElement('div'),
-//          modalTemplate = '<div class="modal__backdrop" data-dismiss="modal"><div class="modal__content"><div class="modal__header"><div class="modal__title" data-modal="title">{{title}}</div><span class="modal__btn-close" data-dismiss="modal" title="Закрыть">×</span></div><div class="modal__body" data-modal="content">{{content}}</div>{{footer}}</div></div>',
-//          modalFooterTemplate = '<div class="modal__footer">{{buttons}}</div>',
-//          modalButtonTemplate = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>',
-//          modalHTML,
-//          modalFooterHTML = '';
-//
-//        elemModal.classList.add('modal');
-//        modalHTML = modalTemplate.replace('{{title}}', options.title || '');
-//        modalHTML = modalHTML.replace('{{content}}', options.content || '');
-//        if (options.footerButtons) {
-//          for (var i = 0, length = options.footerButtons.length; i < length; i++) {
-//            var modalFooterButton = modalButtonTemplate.replace('{{button_class}}', options.footerButtons[i].class);
-//            modalFooterButton = modalFooterButton.replace('{{button_handler}}', options.footerButtons[i].handler);
-//            modalFooterButton = modalFooterButton.replace('{{button_text}}', options.footerButtons[i].text);
-//            modalFooterHTML += modalFooterButton;
-//          }
-//        }
-//        modalFooterHTML = modalFooterTemplate.replace('{{buttons}}', modalFooterHTML);
-//        modalHTML = modalHTML.replace('{{footer}}', modalFooterHTML);
-//        elemModal.innerHTML = modalHTML;
-//        document.body.appendChild(elemModal);
-//        return elemModal;
-//      }
-//
-//      function _showModal() {
-//        if (!_destroyed && !_hiding) {
-//          _elemModal.classList.add('modal__show');
-//          document.dispatchEvent(_eventShowModal);
-//        }
-//      }
-//
-//      function _hideModal() {
-//        _hiding = true;
-//        _elemModal.classList.remove('modal__show');
-//        _elemModal.classList.add('modal__hiding');
-//        setTimeout(function () {
-//          _elemModal.classList.remove('modal__hiding');
-//          _hiding = false;
-//        }, _animationSpeed);
-//        document.dispatchEvent(_eventHideModal);
-//      }
-//
-//      function _handlerCloseModal(e) {
-//        if (e.target.dataset.dismiss === 'modal') {
-//          _hideModal();
-//        }
-//      }
-//
-//      _elemModal = _createModal(options);
-//
-//      _elemModal.addEventListener('click', _handlerCloseModal);
-//      _eventShowModal = new CustomEvent('show.modal', { detail: _elemModal });
-//      _eventHideModal = new CustomEvent('hide.modal', { detail: _elemModal });
-//
-//      return {
-//        show: _showModal,
-//        hide: _hideModal,
-//        destroy: function () {
-//          _elemModal.parentElement.removeChild(_elemModal),
-//            _elemModal.removeEventListener('click', _handlerCloseModal),
-//            destroyed = true;
-//        },
-//        setContent: function (html) {
-//          _elemModal.querySelector('[data-modal="content"]').innerHTML = html;
-//        },
-//        setTitle: function (text) {
-//          _elemModal.querySelector('[data-modal="title"]').innerHTML = text;
-//        }
-//      }
-//    };
-//
-//    (function () {
-//      var elemTarget;
-//      var modal = $modal({
-//        title: 'Купить этот матч?',
-//        content: '<p>Содержмиое модального окна...</p>',
-//        footerButtons: [
-//          { class: 'btn btn-2', text: 'ОК', handler: 'modalHandlerOk' },
-//          { class: 'btn btn-1', text: 'Отмена', handler: 'modalHandlerCancel' }
-//        ]
-//      });
-////      document.addEventListener('show.modal', function (e) {
-//////        document.querySelector('.actions').textContent = 'Действия при открытии модального окна...';
-////        // получить ссылку на DOM-элемент показываемого модального окна (.modal)
-////        console.log(e.detail);
-////      });
-////      document.addEventListener('hide.modal', function (e) {
-////        document.querySelector('.actions').textContent = 'Действия при закрытии модального окна...';
-////        // получить ссылку на DOM-элемент скрываемого модального окна (.modal)
-////        console.log(e.detail);
-////      });
-//      document.addEventListener('click', function (e) {
-//        if (e.target.dataset.toggle === 'modal') {
-//          elemTarget = e.target;
-//          modal.show();
-//          modal.setContent('ID матча  <b>' + e.target.textContent + '</b> <br> Цена матча <b>' + e.target.textContent + '</b>');
-//        } else if (e.target.dataset.handler === 'modalHandlerCancel') {
-//          modal.hide();
-//          document.querySelector('.message').textContent = 'Вы нажали на кнопку Отмена, а открыли окно с помощью кнопки ' + elemTarget.textContent;
-//        } else if (e.target.dataset.handler === 'modalHandlerOk') {
-//          modal.hide();
-//          document.querySelector('.message').textContent = 'Вы нажали на кнопку ОК, а открыли окно с помощью кнопки ' + elemTarget.textContent;
-//        } else if (e.target.dataset.dismiss === 'modal') {
-//          document.querySelector('.message').textContent = 'Вы закрыли модальное окно нажав на крестик или на область вне модального окна, а открыли окно с помощью кнопки ' + elemTarget.textContent;
-//        }
-//      });
-//    })();
-  </script>
+
 
 </body>
 </html>
