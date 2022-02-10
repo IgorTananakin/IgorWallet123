@@ -35,12 +35,13 @@ if (isset($price_match) ) {
 	$result = mysqli_query( $conn, $sql )or die( "database error:" . mysqli_error( $conn ) );
 	//получение в виде массива
 	$result = mysqli_fetch_assoc($result);
+	
 	//проверка если такого матча нет покупаем
 	if (empty($result)) {
 		//получение данных из таблицы wp_wallet
 		$sql = "SELECT * FROM wp_wallet WHERE id_user = $user_id";
 		$result = mysqli_query( $conn, $sql )or die( "database error:" . mysqli_error( $conn ) );
-
+//		var_dump($result);
 		/* извлечение ассоциативного массива */
 		while ($row = mysqli_fetch_assoc($result)) {
 			if ($row['balance'] > $price_match) {

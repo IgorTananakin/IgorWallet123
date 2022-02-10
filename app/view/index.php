@@ -129,6 +129,8 @@ class Plg_Table_View_Admin_Data_Index extends WP_List_Table
 			INNER JOIN wp_users 
 			ON wp_wallet.id_user = wp_users.id
 			WHERE wp_wallet.id_user = $user->ID
+			ORDER BY `{$orderby}` {$order}
+			LIMIT " . (($this -> get_pagenum() - 1) * $per_page) . ", {$per_page}
 			";
 		}
 		

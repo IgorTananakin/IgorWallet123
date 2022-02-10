@@ -214,6 +214,13 @@ class Plg_Table_Controller_Data1
 	
 	public function viewIndex1()
 	{
+        global $wpdb;
+        //var_dump($wpdb);
+        $user_id = get_current_user_id();
+//        var_dump($user_id);
+        ?>
+
+        <?php
         $this -> Table1 -> prepare_items();
 		
 		$btn_add_url = http_build_query(array(
@@ -225,13 +232,134 @@ class Plg_Table_Controller_Data1
         <div class="wrap">
             <h2>
                 <?php echo __('История операций', 'lance') ?>
-                
+
             </h2>
+
+            <?php
+//			include_once(__DIR__ . '/transaction.php');
+            //в дальнейшем переделать подключение средствами wp
+            //файл подключения js для отправки на сервер
+
+            ?>
+<!--            <a href="../wp-content/plugins/wordpress-plugin-demo-table-master/app/controller/processingTransaction.php" class="btn export" alt_user_id="<?php //echo $user_id;?>"> Экспортировать транзакции в Exel</a>-->
+			
+			<?php 
+				$role = "";
+				//проверка какая роль
+				if (Plg_Table_Controller_Data::is_user_role('administrator', $user_id)) {
+					$role = "admin";
+				} else {
+					$role = "";
+				}
+			?>
+			
+			<div class="wrap">
+				<a href="../wp-content/plugins/wordpress-plugin-demo-table-master/app/controller/processingTransaction.php?format=csv&user_id= <?php echo $user_id;?> &role=<?php echo $role;?>" > Экспортировать в CSV</a>
+			
+				<a href="../wp-content/plugins/wordpress-plugin-demo-table-master/app/controller/processingTransaction.php?format=xls&user_id= <?php echo $user_id;?> &role=<?php echo $role;?>" > Экспортировать в Exel</a>
+			</div>
+			
+			
+			<?php 
+//		$time = time();
+//			var_dump($time);
+//			 $date = gmdate("d-m-Y H:i:s",$time);
+//			var_dump($date);
+//			date_default_timezone_set('Europe/London');
+//
+//if (date_default_timezone_get()) {
+//    echo 'date_default_timezone_set: ' . date_default_timezone_get() . '<br />';
+//}
+//
+//if (ini_get('date.timezone')) {
+//    echo 'date.timezone: ' . ini_get('date.timezone');
+//}
+			?>
+<!--
+			<div class="wrap">
+				<form action="">
+					<label class="display-5" for="period"> Задайте период</label>
+					<select name="period" id="">
+						<option value="">Январь 2022</option>
+						<option value="">Февраль 2022</option>
+					</select>
+					<button>Экспортировать период</button>
+				</form>
+				
+			</div>
+-->
+		<form action="../wp-content/plugins/wordpress-plugin-demo-table-master/app/controller/processingTransaction.php" method="post">
+			<div class="alignleft actions">
+				
+				<?php 
+		
+					$date_all = $wpdb -> get_results("SELECT YEAR(wp_wallet_transaction.date_transaction4) as year, DATE_FORMAT(wp_wallet_transaction.date_transaction4,'%m') as number_mounth, MONTHNAME(wp_wallet_transaction.date_transaction4) as name_mounth FROM wp_wallet_transaction", ARRAY_A);
+					
+					foreach ($date_all as $date) {
+						var_dump($date["number_mounth"]);
+					}
+					
+					
+					
+		
+				?>
+				<label for="filter-by-date" class="screen-reader-text">Фильтр по дате</label>
+				<select name="m" id="filter-by-date">
+					<option selected='selected' value="not">Все даты</option>
+					<?php 
+//						$date_all = $wpdb -> get_row("SELECT YEAR(wp_wallet_transaction.date_transaction4) as year, MONTH(wp_wallet_transaction.date_transaction4) as number_mounth, MONTHNAME(wp_wallet_transaction.date_transaction4) as name_mounth FROM wp_wallet_transaction", ARRAY_A);
+		
+						foreach ($date_all as $date) {
+						var_dump($date["year"]);
+					
+		
+					?>
+					<option  <?php echo "value='" . $date["year"] . $date["number_mounth"] . "'";?>Февраль 2022</option>
+					<?php } ?>
+				</select>
+				<label for="filter-by-export" class="screen-reader-text">Фильтр по экспорту</label>
+				<select name="format" id="filter-by-export">
+					<option selected='selected' value="not">Не задавать фильтр на экспорт</option>
+					<option  value='csv'>Экспортировать период в .CSV</option>
+					<option  value='xls'>Экспортировать период в .XLS</option>
+		<!--		<option  value='202112'>Декабрь 2021</option>-->
+				</select>
+				<input type="" style="display: none;" name="user_id" value="<?php echo $user_id; ?>">
+				<input type="" style="display: none;" name="role" value="<?php echo $role; ?>">
+				<input type="submit" name="filter_action" id="post-query-submit" class="button" value="Фильтр"  />		
+			</div>	
+		</form>
+		
+		
+		
+	</div>
+<?php		
+
+//add_filter( 'tutsplus_lowercase_all', 'tutsplus_lowercase_all_callback', 10, 1 );
+//function tutsplus_lowercase_all_callback( $content ) {
+//    return strtolower( $content );
+//}
+// 
+//add_filter( 'the_content', 'tutsplus_the_content' );
+//function tutsplus_the_content( $content ) {
+// 
+//    // Don't proceed with this function if we're not viewing a single post.
+//    if ( ! is_single() ) {
+//        return $content;
+//    }
+// 
+//    return apply_filters( 'tutsplus_lowercase_all', $content );
+//}
+			?>
+			
+			
+			
             <form method="get">
                 
                
                 <?php $this -> Table1 -> display(); ?>
             </form>
+			<?php the_posts_pagination(); ?>
         </div>
         <?php
        

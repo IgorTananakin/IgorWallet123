@@ -296,9 +296,19 @@
 <body>
 	
 	<div  id="buttons1" style="display:flex; flex-direction: column;">
-		<a id="match" class="show" data-toggle="modal" alt_id_match="8882" alt_price="10"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 0-0</a>
-		<a id="match" class="show" data-toggle="modal" alt_id_match="8885445" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 1-0</a>
-		<a id="match" class="show" data-toggle="modal" alt_id_match="123" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 1-1</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="88821" alt_price="10"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 0-0</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="88854451" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 1-0</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1231" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 1-1</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="123451" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 2-1</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="123461" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 2-2</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="123471" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 2-3</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="123481" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 2-4</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="123491" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 2-5</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1234101" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 3-5</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1234111" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 4-5</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1234121" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 5-5</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1234131" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 6-5</a>
+		<a id="match" class="show" data-toggle="modal" alt_id_match="1234131" alt_price="100"  alt_user_id="<?php echo get_current_user_id(); ?>">счёт 6-5</a>
 	</div>
 	
 <!--  <button id="show-2" class="show" data-toggle="modal">show-2</button>-->

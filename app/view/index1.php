@@ -24,7 +24,7 @@ class Plg_Table_View_Admin_Data_Index1 extends WP_List_Table
 		/** Determine the total number of records in the database */
 		$total_items = $wpdb -> get_var("
 			SELECT COUNT(`id`)
-			FROM `" . $wpdb -> prefix . "wp_wallet_transaction`
+			FROM `" . $wpdb -> prefix . "wallet_transaction`
 			{$this -> _getSqlWhere()}
 		");
 		
